@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"phrase-back/src/db"
+	"phrase-back/src/models/user"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +17,7 @@ func main() {
 			"message": "Hello world from server Go.",
 		})
 	})
+	router.GET("/users", user.UserGet)
 	router.Run()
 }
 func init() {
