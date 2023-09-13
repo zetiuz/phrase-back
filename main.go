@@ -11,16 +11,14 @@ import (
 func main() {
 
 	router := gin.Default()
+	user.UserRouter(router)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Hello world from server Go.",
 		})
 	})
-	router.POST("", user.UserCreate)
-	router.GET("/users", user.UserGet)
-	router.GET("/:username", user.UserGetByUser)
-	router.PUT("/:username", user.UserUpdate)
+
 	router.Run()
 }
 func init() {
