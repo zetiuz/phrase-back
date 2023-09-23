@@ -1,6 +1,7 @@
 package user
 
 type Users struct {
+	Id          string
 	Username    string
 	Name        string
 	Description string
