@@ -5,9 +5,10 @@ import (
 )
 
 type Posts struct {
-	Id        string
-	User_id   string
-	Imagen    string
-	Body      string
-	CreatedAt time.Time
+	Id          string
+	User_id     string
+	Imagen      string
+	Body        string
+	CreatedAt   time.Time
+	Thematic_id int64
 }

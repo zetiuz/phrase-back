@@ -9,11 +9,12 @@ import (
 )
 
 type PostRequest struct {
-	Id        string    `json:"id"`
-	User_id   string    `json:"user_id"`
-	Imagen    string    `json:"imagen"`
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"createdAt"`
+	Id          string    `json:"id"`
+	User_id     string    `json:"user_id"`
+	Imagen      string    `json:"imagen"`
+	Body        string    `json:"body"`
+	CreatedAt   time.Time `json:"createdAt"`
+	Thematic_id int64     `json:"thematic_id"`
 }
 
 func PostCreate(c *gin.Context) {
@@ -21,7 +22,7 @@ func PostCreate(c *gin.Context) {
 
 	c.BindJSON(&body)
 
-	create := &Posts{Id: body.Id, User_id: body.User_id, Imagen: body.Imagen, Body: body.Body, CreatedAt: body.CreatedAt}
+	create := &Posts{Id: body.Id, User_id: body.User_id, Imagen: body.Imagen, Body: body.Body, CreatedAt: body.CreatedAt, Thematic_id: body.Thematic_id}
 
 	result := db.DB.Create(&create)
 
