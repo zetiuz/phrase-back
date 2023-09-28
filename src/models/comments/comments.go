@@ -8,3 +8,7 @@ type Comments struct {
 	Body      string
 	CreatedAt time.Time
 }
+
+func (Comments) TableName() string {
+	return "comments"
+}

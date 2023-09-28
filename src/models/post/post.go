@@ -12,3 +12,7 @@ type Posts struct {
 	CreatedAt   time.Time
 	Thematic_id int64
 }
+
+func (Posts) TableName() string {
+	return "posts"
+}

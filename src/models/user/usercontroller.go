@@ -18,7 +18,7 @@ type UserRequest struct {
 	Description     string `json:"description"`
 	Email           string `json:"email"`
 	Password        string `json:"password"`
-	Thematic_id     int64  `json:"thematic"`
+	Thematic_id     int64  `json:"thematic_id"`
 }
 
 var jwtKey = []byte("my_secret_key")

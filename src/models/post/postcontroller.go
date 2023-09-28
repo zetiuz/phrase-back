@@ -22,7 +22,7 @@ func PostCreate(c *gin.Context) {
 
 	c.BindJSON(&body)
 
-	create := &Posts{Id: body.Id, User_id: body.User_id, Imagen: body.Imagen, Body: body.Body, CreatedAt: body.CreatedAt, Thematic_id: body.Thematic_id}
+	create := &Posts{Id: body.Id, User_id: body.User_id, Imagen: body.Imagen, Body: body.Body, CreatedAt: time.Now(), Thematic_id: body.Thematic_id}
 
 	result := db.DB.Create(&create)
 
