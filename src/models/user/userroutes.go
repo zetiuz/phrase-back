@@ -11,6 +11,6 @@ func UserRouter(router *gin.Engine) {
 	router.POST("/user", UserCreate)
 	router.GET("/users", UserGet)
 	router.GET("/:username", UserGetByUser)
-	router.PUT("/:username", UserUpdate)
+	router.PUT("/user/:username", UserUpdate)
 
 }

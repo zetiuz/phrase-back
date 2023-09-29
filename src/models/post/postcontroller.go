@@ -11,7 +11,7 @@ import (
 type PostRequest struct {
 	Id          string    `json:"id"`
 	User_id     string    `json:"user_id"`
-	Imagen      string    `json:"imagen"`
+	Image       string    `json:"imagen"`
 	Body        string    `json:"body"`
 	CreatedAt   time.Time `json:"createdAt"`
 	Thematic_id int64     `json:"thematic_id"`
@@ -20,9 +20,9 @@ type PostRequest struct {
 func PostCreate(c *gin.Context) {
 	body := PostRequest{}
 
-	c.BindJSON(&body)
+	c.ShouldBindJSON(&body)
 
-	create := &Posts{Id: body.Id, User_id: body.User_id, Imagen: body.Imagen, Body: body.Body, CreatedAt: time.Now(), Thematic_id: body.Thematic_id}
+	create := &Posts{Id: body.Id, User_id: body.User_id, Image: body.Image, Body: body.Body, CreatedAt: time.Now(), Thematic_id: body.Thematic_id}
 
 	result := db.DB.Create(&create)
 
@@ -33,6 +33,12 @@ func PostCreate(c *gin.Context) {
 
 	c.JSON(200, &create)
 }
+func PostGet(c *gin.Context) {
+	var post []Posts
+	db.DB.Table("posts").Select("*").Scan(&post)
+	c.JSON(200, &post)
+	return
+}
 func PostUpdate(c *gin.Context) {
 
 	id := c.Param("id")
@@ -41,7 +47,7 @@ func PostUpdate(c *gin.Context) {
 
 	body := PostRequest{}
 	c.BindJSON(&body)
-	data := &Posts{Imagen: body.Imagen, Body: body.Body}
+	data := &Posts{Image: body.Image, Body: body.Body}
 
 	result := db.DB.Model(&post).Where("id", id).Updates(data)
 
@@ -51,4 +57,13 @@ func PostUpdate(c *gin.Context) {
 	}
 
 	c.JSON(200, &post)
+}
+func PostDelete(c *gin.Context) {
+
+	id := c.Param("id")
+	var post Posts
+
+	db.DB.Delete(&post, id)
+	c.JSON(200, gin.H{"deleted": true})
+	return
 }

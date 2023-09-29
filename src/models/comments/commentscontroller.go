@@ -17,7 +17,7 @@ type CommentsRequest struct {
 func CommentsCreate(c *gin.Context) {
 	body := CommentsRequest{}
 
-	c.BindJSON(&body)
+	c.ShouldBindJSON(&body)
 
 	create := &Comments{Post_id: body.Post_id, User_id: body.User_id, Body: body.Body, CreatedAt: time.Now()}
 
