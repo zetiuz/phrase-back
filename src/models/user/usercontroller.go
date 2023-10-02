@@ -130,7 +130,6 @@ func UserGetByUser(c *gin.Context) {
 	c.JSON(200, &user)
 	return
 }
-
 func UserUpdate(c *gin.Context) {
 
 	username := c.Param("username")

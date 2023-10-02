@@ -39,6 +39,27 @@ func PostGet(c *gin.Context) {
 	c.JSON(200, &post)
 	return
 }
+func PostGetByUsername(c *gin.Context) {
+	Username := c.Param("user_id")
+	var post []Posts
+	db.DB.Raw("SELECT * FROM posts WHERE user_id = ?", Username).Scan(&post)
+	c.JSON(200, &post)
+	return
+}
+func PostGetByThematics(c *gin.Context) {
+	Thematics := c.Param("thematic_id")
+	var post []Posts
+	db.DB.Where("thematic_id= ?", Thematics).Table("posts").Select("*").Find(&post)
+	c.JSON(200, &post)
+	return
+}
+func PostGetByWord(c *gin.Context) {
+	word := c.Param("word")
+	var post []Posts
+	db.DB.Where("body LIKE ? ", "%"+word+"%").Table("posts").Select("*").Find(&post)
+	c.JSON(200, &post)
+	return
+}
 func PostUpdate(c *gin.Context) {
 
 	id := c.Param("id")
