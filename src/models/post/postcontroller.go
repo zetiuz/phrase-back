@@ -1,11 +1,15 @@
 package post
 
 import (
+	"fmt"
+	"net/http"
+	"strings"
 	"time"
 
 	"phrase-back/src/db"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 type PostRequest struct {
@@ -15,6 +19,46 @@ type PostRequest struct {
 	Body        string    `json:"body"`
 	CreatedAt   time.Time `json:"createdAt"`
 	Thematic_id int64     `json:"thematic_id"`
+}
+
+func TokenAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		err := TokenValid(c.Request)
+		if err != nil {
+			c.JSON(401, gin.H{"Error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
+
+func TokenValid(r *http.Request) error {
+	tokenString := ExtractToken(r)
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Comprueba que el algoritmo de token sea el que esperas:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte("my_secret_key"), nil
+	})
+	if err != nil {
+		return err
+	}
+	if !token.Valid {
+		return err
+	}
+	return nil
+}
+
+func ExtractToken(r *http.Request) string {
+
+	bearToken := r.Header.Get("Authorization")
+	strArr := strings.Split(bearToken, " ")
+	if len(strArr) == 2 {
+		return strArr[1]
+	}
+	return ""
 }
 
 func PostCreate(c *gin.Context) {
@@ -36,6 +80,27 @@ func PostCreate(c *gin.Context) {
 func PostGet(c *gin.Context) {
 	var post []Posts
 	db.DB.Table("posts").Select("*").Scan(&post)
+	c.JSON(200, &post)
+	return
+}
+func PostGetByUsername(c *gin.Context) {
+	Username := c.Param("user_id")
+	var post []Posts
+	db.DB.Raw("SELECT * FROM posts WHERE user_id = ?", Username).Scan(&post)
+	c.JSON(200, &post)
+	return
+}
+func PostGetByThematics(c *gin.Context) {
+	Thematics := c.Param("thematic_id")
+	var post []Posts
+	db.DB.Where("thematic_id= ?", Thematics).Table("posts").Select("*").Find(&post)
+	c.JSON(200, &post)
+	return
+}
+func PostGetByWord(c *gin.Context) {
+	word := c.Param("word")
+	var post []Posts
+	db.DB.Where("body LIKE ? ", "%"+word+"%").Table("posts").Select("*").Find(&post)
 	c.JSON(200, &post)
 	return
 }

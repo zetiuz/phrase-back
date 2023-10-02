@@ -85,10 +85,26 @@ func Signin(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "email or password is incorrect."})
 		return
 	}
+	userData, err := GetUserData(u.Email) // Asume que tienes una función que obtiene los datos del usuario
 
-	c.JSON(200, gin.H{"token": token})
-
+	c.JSON(200, gin.H{"token": token, "user": userData})
+	c.Next()
 }
+
+func GetUserData(email string) (UserRequest, error) {
+	// User es una estructura que representa a un usuario en tu aplicación.
+	var user UserRequest
+
+	// Aquí asumimos que tienes una variable db que representa a tu base de datos.
+	err := db.DB.Raw("SELECT * FROM users WHERE email = ?", email).Scan(&user).Error
+
+	if err != nil {
+		return UserRequest{}, err
+	}
+
+	return user, nil
+}
+
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
@@ -130,7 +146,6 @@ func UserGetByUser(c *gin.Context) {
 	c.JSON(200, &user)
 	return
 }
-
 func UserUpdate(c *gin.Context) {
 
 	username := c.Param("username")
