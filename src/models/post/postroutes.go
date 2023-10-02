@@ -6,7 +6,7 @@ import (
 
 func PostRouter(router *gin.Engine) {
 
-	router.POST("/post", PostCreate)
+	router.POST("/post", TokenAuthMiddleware(), PostCreate)
 	router.GET("/post", PostGet)
 	router.PUT("/post/:id", PostUpdate)
 	router.DELETE("/post/:id", PostDelete)

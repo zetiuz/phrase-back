@@ -87,7 +87,15 @@ func Signin(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"token": token})
+	c.Next()
 
+}
+func UserGetByEmail(c *gin.Context) {
+	email := c.Param("email")
+	var user Users
+	db.DB.First(&user, "email", email)
+	c.JSON(200, &user)
+	return
 }
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
