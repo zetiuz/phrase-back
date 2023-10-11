@@ -17,7 +17,7 @@ type PostRequest struct {
 	User_id     string    `json:"user_id"`
 	Image       string    `json:"imagen"`
 	Body        string    `json:"body"`
-	CreatedAt   time.Time `json:"createdAt"`
+	CreatedAt   time.Time `json:"created_at"`
 	Thematic_id int64     `json:"thematic_id"`
 }
 
